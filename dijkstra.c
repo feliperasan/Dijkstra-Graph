@@ -4,7 +4,7 @@
 
 #define V 6
 
-// Grafo representado por uma Matriz de Adjacência.
+// Grafo representado por uma Matriz de Adjacência ponderada(com arestas valoradas).
 int grafo[V][V] = {
   {0, 4, 0, 0, 0, 0},
   {4, 0, 8, 0, 0, 0},
