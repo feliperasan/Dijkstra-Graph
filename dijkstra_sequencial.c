@@ -7,7 +7,7 @@
 
 #define V 6
 
-// Grafo representado por uma Matriz de AdjacÃªncia ponderada(com arestas valoradas).
+// Grafo representado por uma Matriz de Adjacˆncia ponderada(com arestas valoradas).
 int grafo[V][V] = {
     {0, 4, 0, 0, 0, 0},
     {4, 0, 8, 0, 0, 0},
@@ -68,7 +68,7 @@ int main()
 
   dijkstra(verticeInicial);
 
-  printf("VÃ©rtice\tDistÃ¢ncia MÃ­nima\n");
+  printf("V‚rtice\tDistƒncia M¡nima\n");
   for (int i = 0; i < V; i++)
   {
     printf("%d\t%d\n", i, distancias[i]);
@@ -77,7 +77,7 @@ int main()
   clock_t fim = clock();
 
   clock_t tempoExecucao = (double)(fim - inicio) / CLOCKS_PER_SEC;
-  printf("Tempo de execuÃ§Ã£o: %f segundos\n", tempoExecucao);
+  printf("Tempo de execu‡Æo: %f segundos\n", tempoExecucao);
 
   return 0;
 }
