@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <mpi.h>
-#include <time.h>
 
 #define V 25
 
@@ -40,12 +39,12 @@ int grafo[V][V] = {
 int distancias[V];
 int visitados[V];
 
-int encontrarVerticeMaisProximo()
+int encontrarVerticeMaisProximo(int verticeInicial, int ultimoVertice)
 {
   int distanciaMinima = INT_MAX;
   int verticeMaisProximo;
 
-  for (int i = 0; i < V; i++)
+  for (int i = verticeInicial; i < ultimoVertice; i++)
   {
     if (!visitados[i] && distancias[i] <= distanciaMinima)
     {
@@ -53,30 +52,33 @@ int encontrarVerticeMaisProximo()
       verticeMaisProximo = i;
     }
   }
-
   return verticeMaisProximo;
 }
 
-void dijkstra(int verticeInicial)
+void dijkstra(int verticeInicial, int ultimoVertice)
 {
-  // Inicia as distancias como valores suficientemente grandes e visitados como falso
+  int verticeAtual;
+
   for (int i = 0; i < V; i++)
   {
     distancias[i] = INT_MAX;
     visitados[i] = 0;
   }
 
-  distancias[verticeInicial] = 0; // Inicia o Vertice da distancia inicial como 0;
+  distancias[verticeInicial] = 0;
+
   for (int i = 0; i < V - 1; i++)
   {
-    int verticeAtual = encontrarVerticeMaisProximo();
+    verticeAtual = encontrarVerticeMaisProximo(verticeInicial, ultimoVertice);
     visitados[verticeAtual] = 1;
 
     for (int j = 0; j < V; j++)
     {
-      if (!visitados[j] && grafo[verticeAtual][j] != 0 && distancias[verticeAtual] != INT_MAX && distancias[verticeAtual] + grafo[verticeAtual][j] < distancias[j])
+      if (!visitados[j] && grafo[verticeAtual][j] != 0 && distancias[verticeAtual] != INT_MAX)
       {
-        distancias[j] = distancias[verticeAtual] + grafo[verticeAtual][j];
+        int novaDistancia = distancias[verticeAtual] + grafo[verticeAtual][j];
+        if (novaDistancia < distancias[j])
+          distancias[j] = novaDistancia;
       }
     }
   }
@@ -84,25 +86,37 @@ void dijkstra(int verticeInicial)
 
 int main(int argc, char *argv[])
 {
+  int numeroDeProcessos, rank;
+
   MPI_Init(&argc, &argv);
-  double tempoExecucao = 0.0;
+  MPI_Comm_size(MPI_COMM_WORLD, &numeroDeProcessos);
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-  int verticeInicial = 0;
-  clock_t inicio = clock();
+  int verticesPorProcessos = V / numeroDeProcessos;
+  int verticeInicial = rank * verticesPorProcessos;
+  int ultimoVertice = (rank == numeroDeProcessos - 1) ? V : (rank + 1) * verticesPorProcessos;
 
-  dijkstra(verticeInicial);
+  double inicio = MPI_Wtime();
 
-  printf("Vertice\tDistancia Minima\n");
-  for (int i = 0; i < V; i++)
+  dijkstra(verticeInicial, ultimoVertice);
+
+  MPI_Allreduce(MPI_IN_PLACE, distancias, V, MPI_INT, MPI_MIN, MPI_COMM_WORLD);
+
+  double fim = MPI_Wtime();
+  double execucao = fim - inicio;
+
+  if (rank == 0)
   {
-    printf("%d\t%d\n", i, distancias[i]);
+    printf("Vertice\tDistancia Minima\n");
+    for (int i = 0; i < V; i++)
+    {
+      printf("%d\t%d\n", i, distancias[i]);
+    }
+
+    printf("Tempo de execucao: %f segundos\n", execucao);
   }
 
-  clock_t fim = clock();
-
-  tempoExecucao += (double)(fim - inicio) / CLOCKS_PER_SEC;
-  printf("Tempo de execucao: %f segundos\n", tempoExecucao);
-
   MPI_Finalize();
+
   return 0;
 }
