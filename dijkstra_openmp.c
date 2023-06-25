@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
-#include <time.h>
 #include <omp.h>
 
 #define V 25
