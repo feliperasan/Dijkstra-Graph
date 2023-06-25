@@ -36,64 +36,48 @@ int grafo[V][V] = {
 int distancias[V];
 int visitados[V];
 
-int encontrarVerticeMaisProximo()
-{
-	int distanciaMinima = INT_MAX;
-	int verticeMaisProximo;
-
-	int i;
-
-#pragma omp parallel for reduction(min : distanciaMinima)
-	for (i = 0; i < V; i++)
-	{
-		if (!visitados[i] && distancias[i] <= distanciaMinima)
-		{
-
-			{
-				distanciaMinima = distancias[i];
-				verticeMaisProximo = i;
-			}
-		}
-	}
-	return verticeMaisProximo;
-}
-
 void dijkstra(int verticeInicial)
 {
-	int verticeAtual = 0;
-#pragma omp parallel shared(distancias, visitados, grafo) private(verticeAtual)
-	{
-		int i;
+// Inicia as distancias como valores suficientemente grandes e visitados como falso
+#pragma omp parallel for
+  for (int i = 0; i < V; i++)
+  {
+    distancias[i] = INT_MAX;
+    visitados[i] = 0;
+  }
 
-#pragma omp for
-		for (i = 0; i < V; i++)
-		{
-			distancias[i] = INT_MAX;
-			visitados[i] = 0;
-		}
+  distancias[verticeInicial] = 0; // Inicia o Vertice da distancia inicial como 0;
 
-		distancias[verticeInicial] = 0;
+  for (int i = 0; i < V - 1; i++)
+  {
+    int distanciaMinima = INT_MAX;
+    int verticeMaisProximo = -1;
 
-#pragma omp for
-		for (i = 0; i < V - 1; i++)
-		{
-			{
-				verticeAtual = encontrarVerticeMaisProximo();
-				visitados[verticeAtual] = 1;
-			}
-			for (int j = 0; j < V; j++)
-			{
-#pragma omp critical
-				if (!visitados[j] && grafo[verticeAtual][j] != 0 && distancias[verticeAtual] != INT_MAX)
-				{
-					int novaDistancia = distancias[verticeAtual] + grafo[verticeAtual][j];
-					if (novaDistancia < distancias[j])
-						distancias[j] = novaDistancia;
-				}
-			}
-		}
-	}
-#pragma omp barrier
+    #pragma omp parallel for
+    for (int j = 0; j < V; j++)
+    {
+      if (!visitados[j] && distancias[j] <= distanciaMinima)
+      {
+        distanciaMinima = distancias[j];
+        verticeMaisProximo = j;
+      }
+    }
+
+    visitados[verticeMaisProximo] = 1;
+
+    //#pragma omp parallel for
+    for (int j = 0; j < V; j++)
+    {
+      //#pragma omp critical
+      if (!visitados[j] &&
+          grafo[verticeMaisProximo][j] != 0 &&
+          distancias[verticeMaisProximo] != INT_MAX &&
+          distancias[verticeMaisProximo] + grafo[verticeMaisProximo][j] < distancias[j])
+      {
+        distancias[j] = distancias[verticeMaisProximo] + grafo[verticeMaisProximo][j];
+      }
+    }
+  }
 }
 
 int main()
