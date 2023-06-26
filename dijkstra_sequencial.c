@@ -89,14 +89,13 @@ int main()
   clock_t inicio = clock();
 
   dijkstra(verticeInicial);
+  clock_t fim = clock();
 
   printf("Vertice\tDistancia Minima\n");
   for (int i = 0; i < V; i++)
   {
     printf("%d\t%d\n", i, distancias[i]);
   }
-
-  clock_t fim = clock();
 
   tempoExecucao += (double)(fim - inicio) / CLOCKS_PER_SEC;
   printf("Tempo de execucao: %f segundos\n", tempoExecucao);
