@@ -1,8 +1,12 @@
 # Algoritmo de Dijkstra: Sequencial, OpenMP e OpenMPI
 
+<p align="center">
+  <img src="https://ascom.ufpa.br/images/Brasao/UFPA.png" width=100px/>
+</p>
+
 ## Integrantes do Trabalho
 - Felipe Rafael dos Santos Barbosa - PPGCC
-- Gabriel de Souza da Silva
+- Gabriel de Souza da Silva - FACOMP
 
 ## Resumo
 
@@ -30,6 +34,5 @@ gcc dijkstra_openmpi.c -o openmpi.o && mpirun -np X ./openmpi.o # X é o número
 ## Links
 <a href="https://www.overleaf.com/read/cyfxhtzwmkjs" 
 target="_blank">
-  <p style="text-decoration: unset; color: white; font-size: 16px;">Ver trabalho na Integra<p>
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/latex/latex-original.svg" width=150px/>
+  <p> &#x1F4C3; OverLeaf</p>
 </a>
