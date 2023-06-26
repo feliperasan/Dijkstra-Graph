@@ -13,7 +13,7 @@
 ## Como Executar
 1. Faça um clone do repositório, e siga para a pasta raiz.
 
-Execute um dos seguintes códigos de acordo a preferência da análise dos resultados:
+2. Execute um dos seguintes códigos de acordo com a preferência de análise dos resultados:
 
 **Sequencial:**
 ``` bash
@@ -28,11 +28,11 @@ gcc -fopenmp dijkstra_openmp.c -o openmp.o && ./openmp.o
 **OpenMPI:**
 ``` bash
 # Execute
-gcc dijkstra_openmpi.c -o openmpi.o && mpirun -np X ./openmpi.o # X é o número de processos a serem executados.
+mpicc dijkstra_openmpi.c -o openmpi.o && mpirun -np X ./openmpi.o # X é o número de processos a serem executados.
 ```
 
 ## Links
 <a href="https://www.overleaf.com/read/cyfxhtzwmkjs" 
-target="_blank">
-  <p> &#x1F4C3; OverLeaf</p>
+target="_blank" style="text-decoration: none;">
+  &#x1F4C3; OverLeaf
 </a>
