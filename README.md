@@ -10,6 +10,10 @@
 
 ## Resumo
 
+Este artigo aborda a implementação sequencial, paralela e distribuída do algoritmo de Dijkstra em grafos. O objetivo é comparar o desempenho e a eficiência das implementações, utilizando 
+linguagem C, OpenMP e OpenMPI. São apresentados conceitos básicos sobre grafos e uma descrição detalhada do algoritmo. O algoritmo de Dijkstra é utilizado para calcular o caminho de custo 
+mínimo entre vértices em um grafo. O artigo também discute a programação paralela com OpenMP e a distribuição do algoritmo com MPI, além de apresentar resultados comparativos das implementações.
+
 ## Como Executar
 1. Faça um clone do repositório, e siga para a pasta raiz.
 
