@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
   MPI_Comm_size(MPI_COMM_WORLD, &numeroDeProcessos);
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-  int verticesPorProcessos = V / numeroDeProcessos;                                            // calculado o número de vértices atribuídos a cada processo
+  int verticesPorProcessos = V / numeroDeProcessos;                                            // calcula o número de vértices atribuídos a cada processo
   int verticeInicial = rank * verticesPorProcessos;                                            // Calculado com base no ID do processo
   int ultimoVertice = (rank == numeroDeProcessos - 1) ? V : (rank + 1) * verticesPorProcessos; // Calculado com base no ID do Processo
 
