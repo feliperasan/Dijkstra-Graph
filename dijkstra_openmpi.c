@@ -7,7 +7,7 @@
 
 #define V 25
 
-// Grafo representado por uma Matriz de Adjac�ncia ponderada(com arestas valoradas).
+// Grafo representado por uma Matriz de Adjacencia ponderada(com arestas valoradas).
 int grafo[V][V] = {
     {0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {10, 0, 8, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -88,19 +88,19 @@ int main(int argc, char *argv[])
 {
   int numeroDeProcessos, rank;
 
-  MPI_Init(&argc, &argv);
+  MPI_Init(&argc, &argv); // Inicialização do ambiente MPI
   MPI_Comm_size(MPI_COMM_WORLD, &numeroDeProcessos);
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-  int verticesPorProcessos = V / numeroDeProcessos;
-  int verticeInicial = rank * verticesPorProcessos;
-  int ultimoVertice = (rank == numeroDeProcessos - 1) ? V : (rank + 1) * verticesPorProcessos;
+  int verticesPorProcessos = V / numeroDeProcessos;                                            // calculado o número de vértices atribuídos a cada processo
+  int verticeInicial = rank * verticesPorProcessos;                                            // Calculado com base no ID do processo
+  int ultimoVertice = (rank == numeroDeProcessos - 1) ? V : (rank + 1) * verticesPorProcessos; // Calculado com base no ID do Processo
 
-  double inicio = MPI_Wtime();
+  double inicio = MPI_Wtime(); // tempo em segundos
 
-  dijkstra(verticeInicial, ultimoVertice);
+  dijkstra(verticeInicial, ultimoVertice); // Inicialização do Alg de Dijkstra
 
-  MPI_Allreduce(MPI_IN_PLACE, distancias, V, MPI_INT, MPI_MIN, MPI_COMM_WORLD);
+  MPI_Allreduce(MPI_IN_PLACE, distancias, V, MPI_INT, MPI_MIN, MPI_COMM_WORLD); // MPI_Allreduce é usada para encontrar as menores distâncias mínimas calculadas por todos os processos e armazená-las em todos os processos. Isso é feito usando a operação MPI_MIN.
 
   double fim = MPI_Wtime();
   double execucao = fim - inicio;
@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
     printf("Tempo de execucao: %f segundos\n", execucao);
   }
 
-  MPI_Finalize();
+  MPI_Finalize(); // Finaliza o ambiente MPI
 
   return 0;
 }
